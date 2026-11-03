@@ -5,3 +5,4 @@ format:
   pdf: default
 ---
 
+Make sure that your quarto writeup includes a clear definition of your network (nodes and edges) as well as a summary description of what is particularly noteworthy about the features of your network. It should also document the source of the data, and note steps done to manage the data (if any) before your R script(s) took over.

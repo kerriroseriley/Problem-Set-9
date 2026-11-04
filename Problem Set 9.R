@@ -63,6 +63,9 @@ V(net)$width <- 1
 # Plot with full names of National Parks
 par(mar = c(0, 0, 2, 0), bg = "white")
 
+
+png("network.png", width = 2400, height = 1800, res = 300)
+
 plot.igraph(net,
             vertex.size = V(net)$eigen * 10 + 3,
             vertex.color = "gold",
@@ -82,3 +85,5 @@ plot.igraph(net,
             
             layout = nice_layout,
             main = "National Parks Shared Species Network")
+
+dev.off()

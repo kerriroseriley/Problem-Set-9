@@ -5,6 +5,16 @@ format:
   pdf: default
 ---
 
+
+
+Research question: Which national parks share the most wildlife species?
+Nodes: US national parks.
+Edges: Two parks are connected if they share one or more animal species.
+Edge weight: Number of species shared.
+Node size: Total number of documented species.
+Node color: Geographic region.
+
+
 What follows is a visualizations showing 
 
 ## My Social Network Visualization

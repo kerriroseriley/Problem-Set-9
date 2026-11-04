@@ -13,7 +13,7 @@ setwd("~/Desktop/Current Classes/R/Problem Set 9")
 # Load ONLY the species csv file
 species_df <- read.csv("~/Desktop/Current Classes/R/Problem Set 9/Data/species.csv", header = TRUE, as.is = TRUE)
 
-# 1. CREATE NODES WITH FULL NAMES
+# Create nodes
 # Extract unique park names straight from the species file
 nodes <- data.frame(
   name = unique(species_df$Park.Name),
@@ -23,7 +23,7 @@ nodes <- data.frame(
 # Use the FULL park name as the label instead of truncating it
 nodes$full_label <- nodes$name
 
-# 2. CREATE LINKS (EDGES) BASED ON SHARED MAMMALS
+# Create links based on shared mammals
 mammals_df <- species_df %>% 
   filter(Category == "Mammal", Occurrence == "Present")
 
@@ -33,7 +33,8 @@ binary_matrix <- as.matrix(incidence_matrix > 0) + 0
 
 # Calculate shared species matrix (Adjacency)
 shared_matrix <- binary_matrix %*% t(binary_matrix)
-diag(shared_matrix) <- 0 # Remove self-loops
+# Remove self-loops
+diag(shared_matrix) <- 0
 
 # Convert adjacency matrix into an Edge List (links) data frame
 links <- as.data.frame(as.table(shared_matrix)) %>%
@@ -49,7 +50,7 @@ links$from <- as.character(links$from)
 links$to <- as.character(links$to)
 nodes_filtered$name <- as.character(nodes_filtered$name)
 
-# 3. CONVERT TO IGRAPH NETWORK
+# Convert this to an igraph network
 net <- graph_from_data_frame(d = links, vertices = nodes_filtered, directed = FALSE)
 
 # Lock in a layout weighted by the number of shared species
@@ -59,7 +60,7 @@ nice_layout <- layout_with_kk(net) # Kamada-Kawai layout spaces out full names b
 V(net)$eigen <- eigen_centrality(net)$vector
 V(net)$width <- 1  
 
-# 4. PLOT WITH FULL NAMES
+# Plot with full names of National Parks
 par(mar = c(0, 0, 2, 0), bg = "white")
 
 plot.igraph(net,
@@ -69,7 +70,8 @@ plot.igraph(net,
             
             # Use full names as labels, with a smaller font size so they fit
             vertex.label = V(net)$full_label,          
-            vertex.label.cex = 0.45,                 # Small font size to prevent massive text overlap
+            # Small font size to prevent massive text overlap
+            vertex.label.cex = 0.45,
             vertex.label.family = "sans",
             vertex.label.font = 2,
             vertex.label.color = "black",
@@ -79,4 +81,4 @@ plot.igraph(net,
             edge.color = rgb(0.2, 0.2, 0.2, alpha = 0.2),
             
             layout = nice_layout,
-            main = "National Parks Shared Species Network (Full Names)")
+            main = "National Parks Shared Species Network")

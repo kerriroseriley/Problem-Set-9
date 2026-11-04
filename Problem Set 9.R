@@ -20,8 +20,11 @@ nodes <- data.frame(
   stringsAsFactors = FALSE
 )
 
-# Use the FULL park name as the label instead of truncating it
-nodes$full_label <- nodes$name
+# Clean the labels to remove "National Park", "and Preserve", etc. for a cleaner look
+nodes$full_label <- nodes$name %>%
+  gsub(" National Park and Preserve", "", .) %>%
+  gsub(" National Park", "", .) %>%
+  gsub(" National Parks", "", .)
 
 # Create links based on shared mammals
 mammals_df <- species_df %>% 

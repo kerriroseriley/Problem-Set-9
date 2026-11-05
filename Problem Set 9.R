@@ -10,7 +10,7 @@ library(igraph)
 # Set the working directory
 setwd("~/Desktop/Current Classes/R/Problem Set 9")
 
-# Load ONLY the species csv file
+# Load only the species csv file
 species_df <- read.csv("~/Desktop/Current Classes/R/Problem Set 9/Data/species.csv", header = TRUE, as.is = TRUE)
 
 # Create nodes
@@ -31,7 +31,7 @@ species_counts <- species_df %>%
   group_by(Park.Name) %>%
   summarize(total_species = n())
 
-# Merge total species count into your nodes dataframe
+# Merge total species count into your nodes data frame
 nodes <- nodes %>%
   left_join(species_counts, by = c("name" = "Park.Name"))
 
@@ -45,13 +45,15 @@ binary_matrix <- as.matrix(incidence_matrix > 0) + 0
 
 # Calculate shared species matrix (Adjacency)
 shared_matrix <- binary_matrix %*% t(binary_matrix)
+
 # Remove self-loops
 diag(shared_matrix) <- 0
 
 # Convert adjacency matrix into an Edge List (links) data frame
 links <- as.data.frame(as.table(shared_matrix)) %>%
   rename(from = Var1, to = Var2, weight = Freq) %>%
-  filter(weight > 10) # Filter to keep only meaningful shared connections (e.g., > 10 shared species)
+  # Filter to keep only meaningful shared connections (> 10 shared species)
+  filter(weight > 10) 
 
 # Filter nodes to match only the connected parks in our filtered links
 nodes_filtered <- nodes %>%
@@ -79,14 +81,13 @@ png("network.png", width = 2400, height = 1800, res = 300)
 
 plot.igraph(net,
             vertex.size = V(net)$size,          # Now sized by total species count!
-            vertex.color = "green",
-            vertex.frame.color = "darkgreen",
+            vertex.color = "#C8A265",
             
             # Use full names as labels, with a smaller font size so they fit
             vertex.label = V(net)$full_label,          
             # Small font size to prevent massive text overlap
             vertex.label.cex = 0.45,
-            vertex.label.family = "sans",
+            vertex.label.family = "Helvetica",
             vertex.label.font = 2,
             vertex.label.color = "black",
             

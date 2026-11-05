@@ -70,9 +70,21 @@ net <- graph_from_data_frame(d = links, vertices = nodes_filtered, directed = FA
 # Lock in a layout weighted by the number of shared species (using Fruchterman-Reingold with weights)
 nice_layout <- layout_with_fr(net, weights = E(net)$weight)
 
+write.csv(nice_layout, "layout.csv", row.names = FALSE)
+nice_layout <- as.matrix(read.csv("layout.csv"))
+nice_layout
+
 # Size the nodes by total documented species count (scaled for visual clarity)
 V(net)$size <- (V(net)$total_species / 250) + 3  
 V(net)$width <- 1  
+
+
+# test
+# Rescale weights so they map cleanly between 0.5 and 4.5 pixels wide
+min_w <- min(E(net)$weight)
+max_w <- max(E(net)$weight)
+edge_widths <- 0.5 + 4 * (E(net)$weight - min_w) / (max_w - min_w)
+# end test
 
 # Plot with full names of National Parks
 par(mar = c(0, 0, 2, 0), bg = "white")
@@ -92,8 +104,8 @@ plot.igraph(net,
             vertex.label.color = "black",
             
             # Faint edge lines
-            edge.width = E(net)$weight * 0.03,
-            edge.color = rgb(0.2, 0.2, 0.2, alpha = 0.2),
+            edge.width = edge_widths,
+            edge.color = rgb(0.2, 0.2, 0.2, alpha = 0.4),
             
             layout = nice_layout,
             # adds title

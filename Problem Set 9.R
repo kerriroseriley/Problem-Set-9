@@ -26,6 +26,15 @@ nodes$full_label <- nodes$name %>%
   gsub(" National Park", "", .) %>%
   gsub(" National Parks", "", .)
 
+# Calculate total documented species per park for node sizing
+species_counts <- species_df %>%
+  group_by(Park.Name) %>%
+  summarize(total_species = n())
+
+# Merge total species count into your nodes dataframe
+nodes <- nodes %>%
+  left_join(species_counts, by = c("name" = "Park.Name"))
+
 # Create links based on shared mammals
 mammals_df <- species_df %>% 
   filter(Category == "Mammal", Occurrence == "Present")
@@ -56,23 +65,22 @@ nodes_filtered$name <- as.character(nodes_filtered$name)
 # Convert this to an igraph network
 net <- graph_from_data_frame(d = links, vertices = nodes_filtered, directed = FALSE)
 
-# Lock in a layout weighted by the number of shared species
-nice_layout <- layout_with_kk(net) # Kamada-Kawai layout spaces out full names better
+# Lock in a layout weighted by the number of shared species (using Fruchterman-Reingold with weights)
+nice_layout <- layout_with_fr(net, weights = E(net)$weight)
 
-# Size the nodes by eigenvector centrality
-V(net)$eigen <- eigen_centrality(net)$vector
+# Size the nodes by total documented species count (scaled for visual clarity)
+V(net)$size <- (V(net)$total_species / 250) + 3  
 V(net)$width <- 1  
 
 # Plot with full names of National Parks
 par(mar = c(0, 0, 2, 0), bg = "white")
 
-
 png("network.png", width = 2400, height = 1800, res = 300)
 
 plot.igraph(net,
-            vertex.size = V(net)$eigen * 10 + 3,
-            vertex.color = "gold",
-            vertex.frame.color = "darkorange",
+            vertex.size = V(net)$size,          # Now sized by total species count!
+            vertex.color = "green",
+            vertex.frame.color = "darkgreen",
             
             # Use full names as labels, with a smaller font size so they fit
             vertex.label = V(net)$full_label,          
@@ -87,6 +95,7 @@ plot.igraph(net,
             edge.color = rgb(0.2, 0.2, 0.2, alpha = 0.2),
             
             layout = nice_layout,
+            # adds title
             main = "National Parks Shared Species Network")
 
 dev.off()

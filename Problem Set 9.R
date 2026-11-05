@@ -102,6 +102,7 @@ plot.igraph(net,
             vertex.label.family = "Helvetica",
             vertex.label.font = 2,
             vertex.label.color = "black",
+            vertex.label.dist = 0.8,
             
             # Faint edge lines
             edge.width = edge_widths,

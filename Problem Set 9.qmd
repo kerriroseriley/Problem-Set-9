@@ -5,26 +5,29 @@ format:
   pdf: default
 ---
 
-https://www.kaggle.com/datasets/nationalparkservice/park-biodiversity/data?select=species.csv
-
-Research question: Which national parks share the most wildlife species?
-
-Nodes: Each individual U.S. National Park extracted from my data set
-
-Edges: Two parks are connected if they share one or more animal species.
-
-Edge weight: Number of species shared.
-
-Node size: Total number of documented species.
+## Research Question
+What follows is a visualizations showing which national parks share the most wildlife species?
 
 
+# Network Definitions
+**Nodes**: Each individual U.S. National Park extracted from my data set
 
-What follows is a visualizations showing 
+**Edges**: Two parks are connected if they share one or more animal species.
+
+**Edge weight**: The weight represents the exact number of shared mammal species between any connected pair of parks.
+
+**Node size**: Total number of documented species.
+
+
+## Data
+Retreived data from: https://www.kaggle.com/datasets/nationalparkservice/park-biodiversity/data?select=species.csv
+Uses the species.csv file
+
+
 
 ## My Social Network Visualization
 ![National Parks Shared Species Network](network.png){fig-align="center" width="70%"}
 
 ## Summary
-Make sure that your quarto writeup includes a clear definition of your network (nodes and edges) as well as a summary description of what is particularly noteworthy about the features of your network. It should also document the source of the data, and note steps done to manage the data (if any) before your R script(s) took over.
 
-Write a short summary (a few sentences is fine) of what you notice about your network.
+The network visualization reveals clear ecological and geographic clustering driven by shared mammal species. Northern wilderness parks (such as Denali, Katmai, and Kobuk Valley) form a distinct, tightly connected northern tier at the top, while arid and desert southwestern parks (such as Death Valley, Joshua Tree, and Saguaro) cluster naturally at the bottom. Additionally, central and western temperate parks form a dense core with heavy interconnectivity, while unique island or isolated ecosystems like Channel Islands and Everglades sit on the outer edges away from the dense central core.

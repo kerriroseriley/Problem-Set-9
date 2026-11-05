@@ -92,7 +92,7 @@ par(mar = c(0, 0, 2, 0), bg = "white")
 png("network.png", width = 2400, height = 1800, res = 300)
 
 plot.igraph(net,
-            vertex.size = V(net)$size,          # Now sized by total species count!
+            vertex.size = V(net)$size,
             vertex.color = "#C8A265",
             
             # Use full names as labels, with a smaller font size so they fit
